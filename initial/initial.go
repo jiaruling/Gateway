@@ -45,7 +45,6 @@ func initConfigFile(path string) {
 		fmt.Println("加载配置文件失败004: ", err.Error())
 		os.Exit(1)
 	}
-	fmt.Println(global.ConfigBase)
 	return
 }
 
