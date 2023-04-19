@@ -1,7 +1,7 @@
 # This is base config
 
 [base]
-    debug_mode="debug"
+    debug_mode="debug"                  # 可选参数 【debug release】
     time_location="Asia/Chongqing"
 
 [http]
@@ -15,7 +15,13 @@
     ]
 
 [log]
+    name = "gateway"
     log_level = "trace"         #日志打印最低级别
+    logFileDir = ""
+    maxSize = 1
+    maxBackups = 7
+    maxAge = 7
+    dev = true
     [log.file_writer]           #文件写入配置
         on = true
         log_path = "./logs/gin_scaffold.inf.log"
@@ -23,7 +29,7 @@
         wf_log_path = "./logs/gin_scaffold.wf.log"
         rotate_wf_log_path = "./logs/gin_scaffold.wf.log.%Y%M%D%H"
     [log.console_writer]        #工作台输出
-        on = false
+        on = true
         color = false
 
 [swagger]

@@ -1,23 +1,20 @@
 package router
 
 import (
-	"github.com/e421083458/gin_scaffold/controller"
-	"github.com/e421083458/gin_scaffold/docs"
-	"github.com/e421083458/gin_scaffold/middleware"
-	"github.com/e421083458/golang_common/lib"
-	"github.com/gin-gonic/contrib/sessions"
 	"github.com/gin-gonic/gin"
-	"github.com/swaggo/gin-swagger"
-	"github.com/swaggo/gin-swagger/swaggerFiles"
+	"github.com/jiaruling/Gateway/global"
+	swaggerfiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
+	"github.com/swaggo/swag/example/override/docs"
 )
 
 func InitRouter(middlewares ...gin.HandlerFunc) *gin.Engine {
 	// programatically set swagger info
-	docs.SwaggerInfo.Title = lib.GetStringConf("base.swagger.title")
-	docs.SwaggerInfo.Description = lib.GetStringConf("base.swagger.desc")
+	docs.SwaggerInfo.Title = global.ConfigBase.Swagger.Title
+	docs.SwaggerInfo.Description = global.ConfigBase.Swagger.Desc
 	docs.SwaggerInfo.Version = "1.0"
-	docs.SwaggerInfo.Host = lib.GetStringConf("base.swagger.host")
-	docs.SwaggerInfo.BasePath = lib.GetStringConf("base.swagger.base_path")
+	docs.SwaggerInfo.Host = global.ConfigBase.Swagger.Host
+	docs.SwaggerInfo.BasePath = global.ConfigBase.Swagger.BasePath
 	docs.SwaggerInfo.Schemes = []string{"http", "https"}
 
 	router := gin.Default()
@@ -27,36 +24,37 @@ func InitRouter(middlewares ...gin.HandlerFunc) *gin.Engine {
 			"message": "pong",
 		})
 	})
-	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
 	//demo
-	v1 := router.Group("/demo")
-	v1.Use(middleware.RecoveryMiddleware(), middleware.RequestLog(), middleware.IPAuthMiddleware(), middleware.TranslationMiddleware())
-	{
-		controller.DemoRegister(v1)
-	}
+	// v1 := router.Group("/demo")
+	// v1.Use()
+	// {
+	// 	// controller.DemoRegister(v1)
+	// }
 
-	//非登陆接口
-	store := sessions.NewCookieStore([]byte("secret"))
-	apiNormalGroup := router.Group("/api")
-	apiNormalGroup.Use(sessions.Sessions("mysession", store),
-		middleware.RecoveryMiddleware(),
-		middleware.RequestLog(),
-		middleware.TranslationMiddleware())
-	{
-		controller.ApiRegister(apiNormalGroup)
-	}
+	// //非登陆接口
+	// store := sessions.NewCookieStore([]byte("secret"))
+	// apiNormalGroup := router.Group("/api")
+	// apiNormalGroup.Use(sessions.Sessions("mysession", store),
+	// 	// middleware.RecoveryMiddleware(),
+	// 	// middleware.RequestLog(),
+	// 	// middleware.TranslationMiddleware())
+	// {
+	// 	// controller.ApiRegister(apiNormalGroup)
+	// }
 
-	//登陆接口
-	apiAuthGroup := router.Group("/api")
-	apiAuthGroup.Use(
-		sessions.Sessions("mysession", store),
-		middleware.RecoveryMiddleware(),
-		middleware.RequestLog(),
-		middleware.SessionAuthMiddleware(),
-		middleware.TranslationMiddleware())
-	{
-		controller.ApiLoginRegister(apiAuthGroup)
-	}
+	// //登陆接口
+	// apiAuthGroup := router.Group("/api")
+	// apiAuthGroup.Use(
+	// 	sessions.Sessions("mysession", store),
+	// 	// middleware.RecoveryMiddleware(),
+	// 	// middleware.RequestLog(),
+	// 	// middleware.SessionAuthMiddleware(),
+	// 	// middleware.TranslationMiddleware()
+	// )
+	// {
+	// 	// controller.ApiLoginRegister(apiAuthGroup)
+	// }
 	return router
 }
