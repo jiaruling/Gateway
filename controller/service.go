@@ -154,40 +154,40 @@ func (service *ServiceController) ServiceDelete(c *gin.Context) {
 	middleware.ResponseSuccess(c, "")
 }
 
-// // todo: 服务详情
-// // ServiceDetail godoc
-// // @Summary 服务详情
-// // @Description 服务详情
-// // @Tags 服务管理
-// // @ID /service/service_detail
-// // @Accept  json
-// // @Produce  json
-// // @Param id query string true "服务ID"
-// // @Success 200 {object} middleware.Response{data=dao.ServiceDetail} "success"
-// // @Router /service/service_detail [get]
-// func (service *ServiceController) ServiceDetail(c *gin.Context) {
-// 	params := &dto.ServiceDeleteInput{}
-// 	if err := params.BindValidParam(c); err != nil {
-// 		middleware.ResponseError(c, 2000, err)
-// 		return
-// 	}
+// todo: 服务详情
+// ServiceDetail godoc
+// @Summary 服务详情
+// @Description 服务详情
+// @Tags 服务管理
+// @ID /service/service_detail
+// @Accept  json
+// @Produce  json
+// @Param id query string true "服务ID"
+// @Success 200 {object} middleware.Response{data=dao.ServiceDetail} "success"
+// @Router /service/service_detail [get]
+func (service *ServiceController) ServiceDetail(c *gin.Context) {
+	params := &dto.ServiceDeleteInput{}
+	if err := params.BindValidParam(c); err != nil {
+		middleware.ResponseError(c, 2000, err)
+		return
+	}
 
-// 	tx := lib.GetMysqlGorm()
+	tx := lib.GetMysqlGorm()
 
-// 	//读取基本信息
-// 	serviceInfo := &dao.ServiceInfo{ID: params.ID}
-// 	serviceInfo, err := serviceInfo.Find(tx, serviceInfo)
-// 	if err != nil {
-// 		middleware.ResponseError(c, 2002, err)
-// 		return
-// 	}
-// 	serviceDetail, err := serviceInfo.ServiceDetail(tx, serviceInfo)
-// 	if err != nil {
-// 		middleware.ResponseError(c, 2003, err)
-// 		return
-// 	}
-// 	middleware.ResponseSuccess(c, serviceDetail)
-// }
+	//读取基本信息
+	serviceInfo := &dao.ServiceInfo{ID: params.ID}
+	serviceInfo, err := serviceInfo.Find(tx, serviceInfo)
+	if err != nil {
+		middleware.ResponseError(c, 2002, err)
+		return
+	}
+	serviceDetail, err := serviceInfo.ServiceDetail(tx, serviceInfo)
+	if err != nil {
+		middleware.ResponseError(c, 2003, err)
+		return
+	}
+	middleware.ResponseSuccess(c, serviceDetail)
+}
 
 // // todo: 服务统计
 // // ServiceStat godoc

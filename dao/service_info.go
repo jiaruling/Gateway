@@ -49,18 +49,18 @@ func (t *ServiceInfo) ServiceDetail(tx *gorm.DB, search *ServiceInfo) (*ServiceD
 	if err != nil && err != gorm.ErrRecordNotFound {
 		return nil, err
 	}
-	// loadBalance := &LoadBalance{ServiceID: search.ID}
-	// loadBalance, err = loadBalance.Find(tx, loadBalance)
-	// if err != nil && err != gorm.ErrRecordNotFound {
-	// 	return nil, err
-	// }
+	loadBalance := &LoadBalance{ServiceID: search.ID}
+	loadBalance, err = loadBalance.Find(tx, loadBalance)
+	if err != nil && err != gorm.ErrRecordNotFound {
+		return nil, err
+	}
 
 	detail := &ServiceDetail{
-		Info:     search,
-		HTTPRule: httpRule,
-		TCPRule:  tcpRule,
-		GRPCRule: grpcRule,
-		// LoadBalance:   loadBalance,
+		Info:          search,
+		HTTPRule:      httpRule,
+		TCPRule:       tcpRule,
+		GRPCRule:      grpcRule,
+		LoadBalance:   loadBalance,
 		AccessControl: accessControl,
 	}
 	return detail, nil
