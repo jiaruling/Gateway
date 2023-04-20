@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jiaruling/Gateway/dao"
@@ -154,7 +155,7 @@ func (service *ServiceController) ServiceDelete(c *gin.Context) {
 	middleware.ResponseSuccess(c, "")
 }
 
-// todo: 服务详情
+// wait for test: 服务详情
 // ServiceDetail godoc
 // @Summary 服务详情
 // @Description 服务详情
@@ -189,58 +190,60 @@ func (service *ServiceController) ServiceDetail(c *gin.Context) {
 	middleware.ResponseSuccess(c, serviceDetail)
 }
 
-// // todo: 服务统计
-// // ServiceStat godoc
-// // @Summary 服务统计
-// // @Description 服务统计
-// // @Tags 服务管理
-// // @ID /service/service_stat
-// // @Accept  json
-// // @Produce  json
-// // @Param id query string true "服务ID"
-// // @Success 200 {object} middleware.Response{data=dto.ServiceStatOutput} "success"
-// // @Router /service/service_stat [get]
-// func (service *ServiceController) ServiceStat(c *gin.Context) {
-// 	params := &dto.ServiceDeleteInput{}
-// 	if err := params.BindValidParam(c); err != nil {
-// 		middleware.ResponseError(c, 2000, err)
-// 		return
-// 	}
+// wait for test: 服务统计
+// ServiceStat godoc
+// @Summary 服务统计
+// @Description 服务统计
+// @Tags 服务管理
+// @ID /service/service_stat
+// @Accept  json
+// @Produce  json
+// @Param id query string true "服务ID"
+// @Success 200 {object} middleware.Response{data=dto.ServiceStatOutput} "success"
+// @Router /service/service_stat [get]
+func (service *ServiceController) ServiceStat(c *gin.Context) {
+	params := &dto.ServiceDeleteInput{}
+	if err := params.BindValidParam(c); err != nil {
+		middleware.ResponseError(c, 2000, err)
+		return
+	}
 
-// 	//读取基本信息
-// 	tx := lib.GetMysqlGorm()
-// 	serviceInfo := &dao.ServiceInfo{ID: params.ID}
-// 	serviceDetail, err := serviceInfo.ServiceDetail(tx, serviceInfo)
-// 	if err != nil {
-// 		middleware.ResponseError(c, 2003, err)
-// 		return
-// 	}
+	//读取基本信息
+	// tx := lib.GetMysqlGorm()
+	// serviceInfo := &dao.ServiceInfo{ID: params.ID}
+	// serviceDetail, err := serviceInfo.ServiceDetail(tx, serviceInfo)
+	// if err != nil {
+	// 	middleware.ResponseError(c, 2003, err)
+	// 	return
+	// }
 
-// 	counter, err := public.FlowCounterHandler.GetCounter(public.FlowServicePrefix + serviceDetail.Info.ServiceName)
-// 	if err != nil {
-// 		middleware.ResponseError(c, 2004, err)
-// 		return
-// 	}
-// 	todayList := []int64{}
-// 	currentTime := time.Now()
-// 	for i := 0; i <= currentTime.Hour(); i++ {
-// 		dateTime := time.Date(currentTime.Year(), currentTime.Month(), currentTime.Day(), i, 0, 0, 0, lib.TimeLocation)
-// 		hourData, _ := counter.GetHourData(dateTime)
-// 		todayList = append(todayList, hourData)
-// 	}
+	// counter, err := public.FlowCounterHandler.GetCounter(public.FlowServicePrefix + serviceDetail.Info.ServiceName)
+	// if err != nil {
+	// 	middleware.ResponseError(c, 2004, err)
+	// 	return
+	// }
+	todayList := []int64{}
+	currentTime := time.Now()
+	for i := 0; i <= currentTime.Hour(); i++ {
+		// dateTime := time.Date(currentTime.Year(), currentTime.Month(), currentTime.Day(), i, 0, 0, 0, lib.TimeLocation)
+		// hourData, _ := counter.GetHourData(dateTime)
+		// todayList = append(todayList, hourData)
+		todayList = append(todayList, 0)
+	}
 
-// 	yesterdayList := []int64{}
-// 	yesterTime := currentTime.Add(-1 * time.Duration(time.Hour*24))
-// 	for i := 0; i <= 23; i++ {
-// 		dateTime := time.Date(yesterTime.Year(), yesterTime.Month(), yesterTime.Day(), i, 0, 0, 0, lib.TimeLocation)
-// 		hourData, _ := counter.GetHourData(dateTime)
-// 		yesterdayList = append(yesterdayList, hourData)
-// 	}
-// 	middleware.ResponseSuccess(c, &dto.ServiceStatOutput{
-// 		Today:     todayList,
-// 		Yesterday: yesterdayList,
-// 	})
-// }
+	yesterdayList := []int64{}
+	// yesterTime := currentTime.Add(-1 * time.Duration(time.Hour*24))
+	for i := 0; i <= 23; i++ {
+		// dateTime := time.Date(yesterTime.Year(), yesterTime.Month(), yesterTime.Day(), i, 0, 0, 0, lib.TimeLocation)
+		// hourData, _ := counter.GetHourData(dateTime)
+		// yesterdayList = append(yesterdayList, hourData)
+		yesterdayList = append(yesterdayList, 0)
+	}
+	middleware.ResponseSuccess(c, &dto.ServiceStatOutput{
+		Today:     todayList,
+		Yesterday: yesterdayList,
+	})
+}
 
 // wait for test: 添加HTTP服务
 // ServiceAddHTTP godoc

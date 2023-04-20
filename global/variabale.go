@@ -7,4 +7,9 @@ var (
 	ConfigMySQL conf.MySQLConf
 	ConfigRedis conf.RedisConf
 	ConfEnv     string
+	LoadTypeMap = map[int]string{
+		LoadTypeHTTP: "HTTP",
+		LoadTypeTCP:  "TCP",
+		LoadTypeGRPC: "GRPC",
+	}
 )

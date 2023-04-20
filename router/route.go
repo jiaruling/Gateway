@@ -60,7 +60,7 @@ func InitRouter(middlewares ...gin.HandlerFunc) *gin.Engine {
 		controller.AdminRegister(adminRouter)
 	}
 
-	// todo: 服务
+	// done: 服务
 	serviceRouter := router.Group("/service")
 	serviceRouter.Use(
 		sessions.Sessions("mysession", store),
@@ -70,6 +70,30 @@ func InitRouter(middlewares ...gin.HandlerFunc) *gin.Engine {
 		middleware.TranslationMiddleware())
 	{
 		controller.ServiceRegister(serviceRouter)
+	}
+
+	// done: 租户
+	appRouter := router.Group("/app")
+	appRouter.Use(
+		sessions.Sessions("mysession", store),
+		middleware.RecoveryMiddleware(),
+		middleware.RequestLog(),
+		middleware.SessionAuthMiddleware(),
+		middleware.TranslationMiddleware())
+	{
+		controller.APPRegister(appRouter)
+	}
+
+	// done: 首页大盘
+	dashRouter := router.Group("/dashboard")
+	dashRouter.Use(
+		sessions.Sessions("mysession", store),
+		middleware.RecoveryMiddleware(),
+		middleware.RequestLog(),
+		middleware.SessionAuthMiddleware(),
+		middleware.TranslationMiddleware())
+	{
+		controller.DashboardRegister(dashRouter)
 	}
 
 	return router
