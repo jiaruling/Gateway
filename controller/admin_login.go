@@ -43,7 +43,7 @@ func (adminlogin *AdminLoginController) AdminLogin(c *gin.Context) {
 	//3. saltPassword==admininfo.password
 	tx := lib.GetMysqlGorm()
 	admin := &dao.Admin{}
-	admin, err := admin.LoginCheck(c, tx, params)
+	admin, err := admin.LoginCheck(tx, params)
 	if err != nil {
 		middleware.ResponseError(c, 2002, err)
 		return

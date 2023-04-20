@@ -5,9 +5,11 @@ type MySQLConf struct {
 }
 
 type MySQL struct {
-	DriverName      string `mapstructure:"driver_name"`
-	DataSourceName  string `mapstructure:"data_source_name"`
-	MaxOpenConn     int    `mapstructure:"max_open_conn"`
-	MaxIdleConn     int    `mapstructure:"max_idle_conn"`
-	MaxConnLifeTime int    `mapstructure:"max_conn_life_time"`
+	Name      string `mapstructure:"name"`
+	User      string `mapstructure:"user"`
+	Password  string `mapstructure:"password"`
+	Ip        string `mapstructure:"ip"`
+	Port      int    `mapstructure:"port"`
+	DB        string `mapstructure:"db"`
+	Parameter string `mapstructure:"parameter"`
 }

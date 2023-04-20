@@ -1,17 +1,18 @@
 package router
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/redis"
 	"github.com/gin-gonic/gin"
 	"github.com/jiaruling/Gateway/controller"
+	"github.com/jiaruling/Gateway/docs"
 	"github.com/jiaruling/Gateway/global"
 	"github.com/jiaruling/Gateway/middleware"
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
-	"github.com/swaggo/swag/example/override/docs"
 )
 
 func InitRouter(middlewares ...gin.HandlerFunc) *gin.Engine {
@@ -32,8 +33,9 @@ func InitRouter(middlewares ...gin.HandlerFunc) *gin.Engine {
 	})
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
+	// 管理员登录登出
 	adminLoginRouter := router.Group("/admin_login")
-	store, err := redis.NewStore(10, "tcp", global.ConfigRedis.List["default"].ProxyList[0], global.ConfigRedis.List["default"].Password, []byte("secret"))
+	store, err := redis.NewStore(10, "tcp", fmt.Sprintf("%s:%d", global.ConfigRedis.List["default"].Ip, global.ConfigRedis.List["default"].Port), global.ConfigRedis.List["default"].Password, []byte("secret"))
 	if err != nil {
 		log.Fatalf("sessions.NewRedisStore err:%v", err)
 	}
@@ -44,6 +46,30 @@ func InitRouter(middlewares ...gin.HandlerFunc) *gin.Engine {
 		middleware.TranslationMiddleware())
 	{
 		controller.AdminLoginRegister(adminLoginRouter)
+	}
+
+	// 管理员信息及密码修改
+	adminRouter := router.Group("/admin")
+	adminRouter.Use(
+		sessions.Sessions("mysession", store),
+		middleware.RecoveryMiddleware(),
+		middleware.RequestLog(),
+		middleware.SessionAuthMiddleware(),
+		middleware.TranslationMiddleware())
+	{
+		controller.AdminRegister(adminRouter)
+	}
+
+	// 服务
+	serviceRouter := router.Group("/service")
+	serviceRouter.Use(
+		sessions.Sessions("mysession", store),
+		middleware.RecoveryMiddleware(),
+		middleware.RequestLog(),
+		middleware.SessionAuthMiddleware(),
+		middleware.TranslationMiddleware())
+	{
+		controller.ServiceRegister(serviceRouter)
 	}
 
 	return router

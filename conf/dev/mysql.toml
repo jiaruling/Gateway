@@ -1,7 +1,9 @@
 [list]
     [list.default]
-        driver_name = "mysql"
-        data_source_name = "root:123456@tcp(127.0.0.1:3366)/test?charset=utf8&parseTime=true&loc=Asia%2FChongqing"
-        max_open_conn = 20
-        max_idle_conn = 10
-        max_conn_life_time = 100
+        name = "default"
+        user ="root"
+        password = "Abc123456"
+        ip = "172.25.114.1"
+        port = 3306
+        db = "gateway"
+        parameter = "charset=utf8mb4&parseTime=True&loc=Local"

@@ -4,7 +4,6 @@ import (
 	"errors"
 	"time"
 
-	"github.com/gin-gonic/gin"
 	"github.com/jiaruling/Gateway/dto"
 	"github.com/jiaruling/Gateway/public"
 	"gorm.io/gorm"
@@ -24,8 +23,8 @@ func (t *Admin) TableName() string {
 	return "gateway_admin"
 }
 
-func (t *Admin) LoginCheck(c *gin.Context, tx *gorm.DB, param *dto.AdminLoginInput) (*Admin, error) {
-	adminInfo, err := t.Find(c, tx, (&Admin{UserName: param.UserName, IsDelete: 0}))
+func (t *Admin) LoginCheck(tx *gorm.DB, param *dto.AdminLoginInput) (*Admin, error) {
+	adminInfo, err := t.Find(tx, (&Admin{UserName: param.UserName, IsDelete: 0}))
 	if err != nil {
 		return nil, errors.New("用户信息不存在")
 	}
@@ -36,7 +35,7 @@ func (t *Admin) LoginCheck(c *gin.Context, tx *gorm.DB, param *dto.AdminLoginInp
 	return adminInfo, nil
 }
 
-func (t *Admin) Find(c *gin.Context, tx *gorm.DB, search *Admin) (*Admin, error) {
+func (t *Admin) Find(tx *gorm.DB, search *Admin) (*Admin, error) {
 	out := &Admin{}
 	err := tx.Where(search).Find(out).Error
 	if err != nil {
@@ -45,6 +44,6 @@ func (t *Admin) Find(c *gin.Context, tx *gorm.DB, search *Admin) (*Admin, error)
 	return out, nil
 }
 
-func (t *Admin) Save(c *gin.Context, tx *gorm.DB) error {
+func (t *Admin) Save(tx *gorm.DB) error {
 	return tx.Save(t).Error
 }

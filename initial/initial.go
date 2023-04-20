@@ -7,7 +7,6 @@ import (
 	"strings"
 
 	"github.com/jiaruling/Gateway/global"
-	"github.com/jiaruling/Gateway/public"
 	"github.com/jiaruling/golang_utils/lib"
 )
 
@@ -23,9 +22,7 @@ func init() {
 		global.ConfigBase.Log.MaxAge, global.ConfigBase.Log.Dev,
 	)
 	// 初始化数据库连接
-	trace, log := public.GetTraceAndLog()
-	log.Error(trace, lib.DLTagMySqlFailed, map[string]interface{}{"hint": "连接数据库失败", "hint_code": 1001})
-	log.Warn(trace, lib.DLTagRedisFailed, map[string]interface{}{"hint": "连接REDIS失败", "hint_code": 1001})
+	initDB()
 }
 
 func initConfigFile(path string) {
@@ -52,4 +49,20 @@ func initConfEnv(path string) {
 	p := strings.Split(path, "/")
 	global.ConfEnv = p[len(p)-1]
 	return
+}
+
+func initDB() {
+	// Mysql
+	for _, m := range global.ConfigMySQL.List {
+		mysql := lib.NewMysqlGorm(m.User, m.Password, m.Ip, m.Port, m.DB)
+		mysql.Name = m.Name
+		mysql.Parameter = m.Parameter
+		mysql.InitMysqlGorm()
+	}
+	// Redis
+	for _, r := range global.ConfigRedis.List {
+		redis := lib.NewRedis(fmt.Sprintf("%s:%v", r.Ip, r.Port), r.Password, r.DB)
+		redis.Name = r.Name
+		redis.InitRedis()
+	}
 }
