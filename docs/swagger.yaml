@@ -675,7 +675,7 @@ paths:
       tags:
       - 管理员接口
   /admin/change_pwd:
-    post:
+    put:
       consumes:
       - application/json
       description: 修改密码
@@ -731,7 +731,7 @@ paths:
       tags:
       - 管理员接口
   /admin_login/logout:
-    get:
+    delete:
       consumes:
       - application/json
       description: 管理员退出
@@ -836,7 +836,7 @@ paths:
       tags:
       - 服务管理
   /service/service_delete:
-    get:
+    delete:
       consumes:
       - application/json
       description: 服务删除
@@ -926,7 +926,7 @@ paths:
       tags:
       - 服务管理
   /service/service_update_grpc:
-    post:
+    put:
       consumes:
       - application/json
       description: grpc服务更新
@@ -954,7 +954,7 @@ paths:
       tags:
       - 服务管理
   /service/service_update_http:
-    post:
+    put:
       consumes:
       - application/json
       description: 修改HTTP服务
@@ -982,7 +982,7 @@ paths:
       tags:
       - 服务管理
   /service/service_update_tcp:
-    post:
+    put:
       consumes:
       - application/json
       description: tcp服务更新

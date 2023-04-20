@@ -19,7 +19,7 @@ type AdminController struct{}
 func AdminRegister(group *gin.RouterGroup) {
 	adminLogin := &AdminController{}
 	group.GET("/admin_info", adminLogin.AdminInfo)
-	group.POST("/change_pwd", adminLogin.ChangePwd)
+	group.PUT("/change_pwd", adminLogin.ChangePwd)
 }
 
 // done: 管理员信息
@@ -68,7 +68,7 @@ func (adminlogin *AdminController) AdminInfo(c *gin.Context) {
 // @Produce  json
 // @Param body body dto.ChangePwdInput true "body"
 // @Success 200 {object} middleware.Response{data=string} "success"
-// @Router /admin/change_pwd [post]
+// @Router /admin/change_pwd [put]
 func (adminlogin *AdminController) ChangePwd(c *gin.Context) {
 	params := &dto.ChangePwdInput{}
 	if err := params.BindValidParam(c); err != nil {

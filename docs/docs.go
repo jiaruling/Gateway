@@ -53,7 +53,7 @@ const docTemplate = `{
             }
         },
         "/admin/change_pwd": {
-            "post": {
+            "put": {
                 "description": "修改密码",
                 "consumes": [
                     "application/json"
@@ -147,7 +147,7 @@ const docTemplate = `{
             }
         },
         "/admin_login/logout": {
-            "get": {
+            "delete": {
                 "description": "管理员退出",
                 "consumes": [
                     "application/json"
@@ -324,7 +324,7 @@ const docTemplate = `{
             }
         },
         "/service/service_delete": {
-            "get": {
+            "delete": {
                 "description": "服务删除",
                 "consumes": [
                     "application/json"
@@ -472,7 +472,7 @@ const docTemplate = `{
             }
         },
         "/service/service_update_grpc": {
-            "post": {
+            "put": {
                 "description": "grpc服务更新",
                 "consumes": [
                     "application/json"
@@ -519,7 +519,7 @@ const docTemplate = `{
             }
         },
         "/service/service_update_http": {
-            "post": {
+            "put": {
                 "description": "修改HTTP服务",
                 "consumes": [
                     "application/json"
@@ -566,7 +566,7 @@ const docTemplate = `{
             }
         },
         "/service/service_update_tcp": {
-            "post": {
+            "put": {
                 "description": "tcp服务更新",
                 "consumes": [
                     "application/json"
