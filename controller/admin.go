@@ -22,6 +22,7 @@ func AdminRegister(group *gin.RouterGroup) {
 	group.POST("/change_pwd", adminLogin.ChangePwd)
 }
 
+// done: 管理员信息
 // AdminInfo godoc
 // @Summary 管理员信息
 // @Description 管理员信息
@@ -57,6 +58,7 @@ func (adminlogin *AdminController) AdminInfo(c *gin.Context) {
 	middleware.ResponseSuccess(c, out)
 }
 
+// done: 修改密码
 // ChangePwd godoc
 // @Summary 修改密码
 // @Description 修改密码

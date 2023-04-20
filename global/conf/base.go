@@ -5,6 +5,7 @@ type BaseConf struct {
 	Http    Http    `mapstructure:"http"`
 	Log     Log     `mapstructure:"log"`
 	Swagger Swagger `mapstructure:"swagger"`
+	Cluster Cluster `mapstructure:"cluster"`
 }
 
 type Base struct {
@@ -50,4 +51,10 @@ type Swagger struct {
 	Desc     string `mapstructure:"desc"`
 	Host     string `mapstructure:"host"`
 	BasePath string `mapstructure:"base_path"`
+}
+
+type Cluster struct {
+	ClusterIp      string `mapstructure:"cluster_ip"`
+	ClusterPort    string `mapstructure:"cluster_port"`
+	ClusterSSLPort string `mapstructure:"cluster_ssl_port"`
 }

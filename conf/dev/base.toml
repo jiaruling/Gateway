@@ -37,3 +37,8 @@
     desc="网关服务"
     host="47.109.72.217:8880"
     base_path=""
+
+[cluster]
+    cluster_ip="127.0.0.1"
+    cluster_port="8080"
+    cluster_ssl_port="4433"

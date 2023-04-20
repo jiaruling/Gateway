@@ -33,7 +33,7 @@ func InitRouter(middlewares ...gin.HandlerFunc) *gin.Engine {
 	})
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
-	// 管理员登录登出
+	// done: 管理员登录登出
 	adminLoginRouter := router.Group("/admin_login")
 	store, err := redis.NewStore(10, "tcp", fmt.Sprintf("%s:%d", global.ConfigRedis.List["default"].Ip, global.ConfigRedis.List["default"].Port), global.ConfigRedis.List["default"].Password, []byte("secret"))
 	if err != nil {
@@ -48,7 +48,7 @@ func InitRouter(middlewares ...gin.HandlerFunc) *gin.Engine {
 		controller.AdminLoginRegister(adminLoginRouter)
 	}
 
-	// 管理员信息及密码修改
+	// done: 管理员信息及密码修改
 	adminRouter := router.Group("/admin")
 	adminRouter.Use(
 		sessions.Sessions("mysession", store),
@@ -60,7 +60,7 @@ func InitRouter(middlewares ...gin.HandlerFunc) *gin.Engine {
 		controller.AdminRegister(adminRouter)
 	}
 
-	// 服务
+	// todo: 服务
 	serviceRouter := router.Group("/service")
 	serviceRouter.Use(
 		sessions.Sessions("mysession", store),

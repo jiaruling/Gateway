@@ -21,6 +21,7 @@ func AdminLoginRegister(group *gin.RouterGroup) {
 	group.GET("/logout", adminLogin.AdminLoginOut)
 }
 
+// done: 管理员登陆
 // AdminLogin godoc
 // @Summary 管理员登陆
 // @Description 管理员登陆
@@ -68,6 +69,7 @@ func (adminlogin *AdminLoginController) AdminLogin(c *gin.Context) {
 	middleware.ResponseSuccess(c, out)
 }
 
+// done: 管理员退出
 // AdminLogin godoc
 // @Summary 管理员退出
 // @Description 管理员退出
