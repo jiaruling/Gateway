@@ -265,7 +265,6 @@ func (admin *APPController) AppStatistics(c *gin.Context) {
 	// 	middleware.ResponseError(c, 2002, err)
 	// 	return
 	// }
-
 	//今日流量全天小时级访问统计
 	todayStat := []int64{}
 	// counter, err := public.FlowCounterHandler.GetCounter(public.FlowAppPrefix + detail.AppID)
@@ -274,14 +273,13 @@ func (admin *APPController) AppStatistics(c *gin.Context) {
 	// 	c.Abort()
 	// 	return
 	// }
-	// currentTime := time.Now()
-	for i := 0; i <= time.Now().In(lib.TimeLocation).Hour(); i++ {
+	currentTime := time.Now()
+	for i := 0; i <= currentTime.Hour(); i++ {
 		// dateTime := time.Date(currentTime.Year(), currentTime.Month(), currentTime.Day(), i, 0, 0, 0, lib.TimeLocation)
 		// hourData, _ := counter.GetHourData(dateTime)
 		// todayStat = append(todayStat, hourData)
 		todayStat = append(todayStat, 0)
 	}
-
 	//昨日流量全天小时级访问统计
 	yesterdayStat := []int64{}
 	// yesterTime := currentTime.Add(-1 * time.Duration(time.Hour*24))

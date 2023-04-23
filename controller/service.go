@@ -21,7 +21,7 @@ func ServiceRegister(group *gin.RouterGroup) {
 	group.GET("/service_list", service.ServiceList)
 	group.DELETE("/service_delete", service.ServiceDelete)
 	group.GET("/service_detail", service.ServiceDetail)
-	// group.GET("/service_stat", service.ServiceStat)
+	group.GET("/service_stat", service.ServiceStat)
 	group.POST("/service_add_http", service.ServiceAddHTTP)
 	group.PUT("/service_update_http", service.ServiceUpdateHTTP)
 	group.POST("/service_add_tcp", service.ServiceAddTcp)
