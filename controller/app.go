@@ -34,7 +34,7 @@ func APPRegister(router *gin.RouterGroup) {
 	router.PUT("/app_update", admin.AppUpdate)
 }
 
-// wait for test: 租户列表
+// done: 租户列表
 // APPList godoc
 // @Summary 租户列表
 // @Description 租户列表
@@ -89,7 +89,7 @@ func (admin *APPController) APPList(c *gin.Context) {
 	return
 }
 
-// wait for test: 租户详情
+// done: 租户详情
 // APPDetail godoc
 // @Summary 租户详情
 // @Description 租户详情
@@ -118,7 +118,7 @@ func (admin *APPController) APPDetail(c *gin.Context) {
 	return
 }
 
-// wait for test: 租户删除
+// done: 租户删除
 // APPDelete godoc
 // @Summary 租户删除
 // @Description 租户删除
@@ -152,7 +152,7 @@ func (admin *APPController) APPDelete(c *gin.Context) {
 	return
 }
 
-// wait for test: 租户添加
+// done: 租户添加
 // AppAdd godoc
 // @Summary 租户添加
 // @Description 租户添加
@@ -198,7 +198,7 @@ func (admin *APPController) AppAdd(c *gin.Context) {
 	return
 }
 
-// wait for test: 租户更新
+// done: 租户更新
 // AppUpdate godoc
 // @Summary 租户更新
 // @Description 租户更新
@@ -239,7 +239,7 @@ func (admin *APPController) AppUpdate(c *gin.Context) {
 	return
 }
 
-// wait for test: 租户统计
+// todo: 租户统计
 // AppStatistics godoc
 // @Summary 租户统计
 // @Description 租户统计

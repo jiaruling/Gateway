@@ -155,7 +155,7 @@ func (service *ServiceController) ServiceDelete(c *gin.Context) {
 	middleware.ResponseSuccess(c, "")
 }
 
-// wait for test: 服务详情
+// done: 服务详情
 // ServiceDetail godoc
 // @Summary 服务详情
 // @Description 服务详情
@@ -190,7 +190,7 @@ func (service *ServiceController) ServiceDetail(c *gin.Context) {
 	middleware.ResponseSuccess(c, serviceDetail)
 }
 
-// wait for test: 服务统计
+// todo: 服务统计
 // ServiceStat godoc
 // @Summary 服务统计
 // @Description 服务统计
@@ -245,7 +245,7 @@ func (service *ServiceController) ServiceStat(c *gin.Context) {
 	})
 }
 
-// wait for test: 添加HTTP服务
+// done: 添加HTTP服务
 // ServiceAddHTTP godoc
 // @Summary 添加HTTP服务
 // @Description 添加HTTP服务
@@ -343,7 +343,7 @@ func (service *ServiceController) ServiceAddHTTP(c *gin.Context) {
 	middleware.ResponseSuccess(c, "")
 }
 
-// wait for test: 修改HTTP服务
+// done: 修改HTTP服务
 // ServiceUpdateHTTP godoc
 // @Summary 修改HTTP服务
 // @Description 修改HTTP服务
@@ -431,7 +431,7 @@ func (service *ServiceController) ServiceUpdateHTTP(c *gin.Context) {
 	middleware.ResponseSuccess(c, "")
 }
 
-// wait for test: tcp服务添加
+// done: tcp服务添加
 // ServiceAddHttp godoc
 // @Summary tcp服务添加
 // @Description tcp服务添加
@@ -534,7 +534,7 @@ func (admin *ServiceController) ServiceAddTcp(c *gin.Context) {
 	return
 }
 
-// wait for test: tcp服务更新
+// done: tcp服务更新
 // ServiceUpdateTcp godoc
 // @Summary tcp服务更新
 // @Description tcp服务更新
@@ -625,7 +625,7 @@ func (admin *ServiceController) ServiceUpdateTcp(c *gin.Context) {
 	return
 }
 
-// wait for test: grpc服务添加
+// done: grpc服务添加
 // ServiceAddHttp godoc
 // @Summary grpc服务添加
 // @Description grpc服务添加
@@ -730,7 +730,7 @@ func (admin *ServiceController) ServiceAddGrpc(c *gin.Context) {
 	return
 }
 
-// wait for test: grpc服务更新
+// done: grpc服务更新
 // ServiceUpdateTcp godoc
 // @Summary grpc服务更新
 // @Description grpc服务更新

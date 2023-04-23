@@ -29,7 +29,7 @@ func DashboardRegister(group *gin.RouterGroup) {
 	group.GET("/service_stat", service.ServiceStat)
 }
 
-// wait for test: 指标统计
+// todo: 指标统计
 // PanelGroupData godoc
 // @Summary 指标统计
 // @Description 指标统计
@@ -68,7 +68,7 @@ func (service *DashboardController) PanelGroupData(c *gin.Context) {
 	middleware.ResponseSuccess(c, out)
 }
 
-// wait for test: 服务类型占比
+// done: 服务类型占比
 // ServiceStat godoc
 // @Summary 服务统计
 // @Description 服务统计
@@ -103,7 +103,7 @@ func (service *DashboardController) ServiceStat(c *gin.Context) {
 	middleware.ResponseSuccess(c, out)
 }
 
-// wait for test: 流量统计
+// todo: 流量统计
 // FlowStat godoc
 // @Summary 服务统计
 // @Description 服务统计
