@@ -49,15 +49,15 @@ func (t *App) APPList(tx *gorm.DB, params *dto.APPListInput) ([]App, int64, erro
 	offset := (pageNo - 1) * pageSize
 	query := tx.Table(t.TableName()).Select("*")
 	query = query.Where("is_delete=?", 0)
+	errCount := query.Count(&count).Error
+	if errCount != nil {
+		return nil, 0, errCount
+	}
 	if params.Info != "" {
 		query = query.Where(" (name like ? or app_id like ?)", "%"+params.Info+"%", "%"+params.Info+"%")
 	}
 	err := query.Limit(pageSize).Offset(offset).Order("id desc").Find(&list).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
-		return nil, 0, err
-	}
-	errCount := query.Count(&count).Error
-	if errCount != nil {
 		return nil, 0, err
 	}
 	return list, count, nil
