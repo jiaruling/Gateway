@@ -11,7 +11,7 @@ import (
 	"github.com/jiaruling/Gateway/public"
 )
 
-// 匹配接入方式 基于请求信息
+// 黑名单
 func HTTPBlackListMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		serverInterface, ok := c.Get("service")

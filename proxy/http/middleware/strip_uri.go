@@ -10,7 +10,7 @@ import (
 	m "github.com/jiaruling/Gateway/middleware"
 )
 
-// 匹配接入方式 基于请求信息
+// 去除接入前缀 http://127.0.0.1:8080/test_http_string/abbb -> http://127.0.0.1:2004/abbb
 func HTTPStripUriMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		serverInterface, ok := c.Get("service")
@@ -22,13 +22,8 @@ func HTTPStripUriMiddleware() gin.HandlerFunc {
 		serviceDetail := serverInterface.(*dao.ServiceDetail)
 
 		if serviceDetail.HTTPRule.RuleType == global.HTTPRuleTypePrefixURL && serviceDetail.HTTPRule.NeedStripUri == 1 {
-			//fmt.Println("c.Request.URL.Path",c.Request.URL.Path)
 			c.Request.URL.Path = strings.Replace(c.Request.URL.Path, serviceDetail.HTTPRule.Rule, "", 1)
-			//fmt.Println("c.Request.URL.Path",c.Request.URL.Path)
 		}
-		//http://127.0.0.1:8080/test_http_string/abbb
-		//http://127.0.0.1:2004/abbb
-
 		c.Next()
 	}
 }

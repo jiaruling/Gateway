@@ -10,7 +10,7 @@ import (
 	m "github.com/jiaruling/Gateway/middleware"
 )
 
-// 匹配接入方式 基于请求信息
+// url重写
 func HTTPUrlRewriteMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		serverInterface, ok := c.Get("service")

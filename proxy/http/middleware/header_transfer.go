@@ -9,7 +9,7 @@ import (
 	m "github.com/jiaruling/Gateway/middleware"
 )
 
-// 匹配接入方式 基于请求信息
+// header头设置
 func HTTPHeaderTransferMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		serverInterface, ok := c.Get("service")
