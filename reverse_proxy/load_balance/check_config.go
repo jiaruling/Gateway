@@ -45,14 +45,13 @@ func (s *LoadBalanceCheckConf) GetConf() []string {
 	return confList
 }
 
-//更新配置时，通知监听者也更新
+// 更新配置时，通知监听者也更新
 func (s *LoadBalanceCheckConf) WatchConf() {
-	//fmt.Println("watchConf")
 	go func() {
 		confIpErrNum := map[string]int{}
 		for {
 			changedList := []string{}
-			for item, _ := range s.confIpWeight {
+			for item := range s.confIpWeight {
 				conn, err := net.DialTimeout("tcp", item, time.Duration(DefaultCheckTimeout)*time.Second)
 				//todo http statuscode
 				if err == nil {
@@ -82,9 +81,8 @@ func (s *LoadBalanceCheckConf) WatchConf() {
 	}()
 }
 
-//更新配置时，通知监听者也更新
+// 更新配置时，通知监听者也更新
 func (s *LoadBalanceCheckConf) UpdateConf(conf []string) {
-	//fmt.Println("UpdateConf", conf)
 	s.activeList = conf
 	for _, obs := range s.observers {
 		obs.Update()
@@ -94,7 +92,7 @@ func (s *LoadBalanceCheckConf) UpdateConf(conf []string) {
 func NewLoadBalanceCheckConf(format string, conf map[string]string) (*LoadBalanceCheckConf, error) {
 	aList := []string{}
 	//默认初始化
-	for item, _ := range conf {
+	for item := range conf {
 		aList = append(aList, item)
 	}
 	mConf := &LoadBalanceCheckConf{format: format, activeList: aList, confIpWeight: conf}

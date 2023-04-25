@@ -16,16 +16,16 @@ func InitRouter(middlewares ...gin.HandlerFunc) *gin.Engine {
 
 	router.Use(
 		hm.HTTPAccessModeMiddleware(),
-		hm.HTTPFlowCountMiddleware(),
-		hm.HTTPFlowLimitMiddleware(),
-		hm.HTTPJwtAuthTokenMiddleware(),
-		hm.HTTPJwtFlowCountMiddleware(),
-		hm.HTTPJwtFlowLimitMiddleware(),
-		hm.HTTPWhiteListMiddleware(),
-		hm.HTTPBlackListMiddleware(),
-		hm.HTTPHeaderTransferMiddleware(),
-		hm.HTTPStripUriMiddleware(),
-		hm.HTTPUrlRewriteMiddleware(),
+		// hm.HTTPFlowCountMiddleware(),
+		// hm.HTTPFlowLimitMiddleware(),
+		// hm.HTTPJwtAuthTokenMiddleware(),
+		// hm.HTTPJwtFlowCountMiddleware(),
+		// hm.HTTPJwtFlowLimitMiddleware(),
+		// hm.HTTPWhiteListMiddleware(),
+		// hm.HTTPBlackListMiddleware(),
+		// hm.HTTPHeaderTransferMiddleware(),
+		// hm.HTTPStripUriMiddleware(),
+		// hm.HTTPUrlRewriteMiddleware(),
 		hm.HTTPReverseProxyMiddleware(),
 	)
 	return router

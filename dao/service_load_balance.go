@@ -84,11 +84,13 @@ func init() {
 }
 
 func (lbr *LoadBalancer) GetLoadBalancer(service *ServiceDetail) (load_balance.LoadBalance, error) {
+	// 负载均衡策略存在直接返回
 	for _, lbrItem := range lbr.LoadBanlanceSlice {
 		if lbrItem.ServiceName == service.Info.ServiceName {
 			return lbrItem.LoadBanlance, nil
 		}
 	}
+	// 协议类型
 	schema := "http://"
 	if service.HTTPRule.NeedHttps == 1 {
 		schema = "https://"
@@ -96,20 +98,23 @@ func (lbr *LoadBalancer) GetLoadBalancer(service *ServiceDetail) (load_balance.L
 	if service.Info.LoadType == global.LoadTypeTCP || service.Info.LoadType == global.LoadTypeGRPC {
 		schema = ""
 	}
+	// 获取ip列表
 	ipList := service.LoadBalance.GetIPListByModel()
+	// 获取ip对应的权重
 	weightList := service.LoadBalance.GetWeightListByModel()
+	// 使ip和权重相互对应
 	ipConf := map[string]string{}
 	for ipIndex, ipItem := range ipList {
 		ipConf[ipItem] = weightList[ipIndex]
 	}
-	//fmt.Println("ipConf", ipConf)
+	// tag: 核心代码
 	mConf, err := load_balance.NewLoadBalanceCheckConf(fmt.Sprintf("%s%s", schema, "%s"), ipConf)
 	if err != nil {
 		return nil, err
 	}
 	lb := load_balance.LoadBanlanceFactorWithConf(load_balance.LbType(service.LoadBalance.RoundType), mConf)
 
-	//save to map and slice
+	// 负载均衡策略保存到map和slice
 	lbItem := &LoadBalancerItem{
 		LoadBanlance: lb,
 		ServiceName:  service.Info.ServiceName,
