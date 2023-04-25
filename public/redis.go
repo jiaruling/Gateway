@@ -1,21 +1,26 @@
 package public
 
-// import (
-// 	"github.com/garyburd/redigo/redis"
-// 	"github.com/jiaruling/golang_utils/lib"
-// )
+import (
+	"context"
+	"strconv"
 
-// func RedisConfPipline(pip ...func(c redis.Conn)) error {
-// 	c := lib.GetRedis()
-// 	defer c.Close()
-// 	for _, f := range pip {
-// 		f(c)
-// 	}
-// 	return nil
-// }
+	"github.com/go-redis/redis/v8"
+	"github.com/jiaruling/golang_utils/lib"
+)
 
-// func RedisConfDo(commandName string, args ...interface{}) (interface{}, error) {
-// 	c := lib.GetRedis()
-// 	defer c.Close()
-// 	return c.Do(commandName, args...)
-// }
+func RedisConfPipline(pip ...func(c *redis.Client)) error {
+	c := lib.GetRedis()
+	for _, f := range pip {
+		f(c)
+	}
+	return nil
+}
+
+func RedisConfDo(commandName string, args ...interface{}) (int64, error) {
+	rdb := lib.GetRedis()
+	val, err := rdb.Get(context.Background(), "key").Result()
+	if err != nil {
+		return 0, err
+	}
+	return strconv.ParseInt(val, 10, 64)
+}

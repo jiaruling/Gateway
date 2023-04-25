@@ -38,7 +38,7 @@ func initConfigFile(path string) {
 		fmt.Println("加载配置文件失败003: ", err.Error())
 		os.Exit(1)
 	}
-	if err := lib.ParseConfigViper(filepath.Join(path, "base.toml"), "toml", false); err != nil {
+	if err := lib.ParseConfigViper(filepath.Join(path, "proxy.toml"), "toml", false); err != nil {
 		fmt.Println("加载配置文件失败004: ", err.Error())
 		os.Exit(1)
 	}

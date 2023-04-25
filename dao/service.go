@@ -70,19 +70,19 @@ func (s *ServiceManager) HTTPAccessMode(c *gin.Context) (*ServiceDetail, error) 
 	//2、域名匹配 www.test.com ==> serviceSlice.rule
 	//host c.Request.Host
 	//path c.Request.URL.Path
-	host := c.Request.Host
-	host = host[0:strings.Index(host, ":")]
-	path := c.Request.URL.Path
+	host := c.Request.Host                  // 获取地址加端口
+	host = host[0:strings.Index(host, ":")] // 获取地址
+	path := c.Request.URL.Path              // 获取访问路径
 	for _, serviceItem := range s.ServiceSlice {
 		if serviceItem.Info.LoadType != global.LoadTypeHTTP {
 			continue
 		}
-		if serviceItem.HTTPRule.RuleType == global.HTTPRuleTypeDomain {
+		if serviceItem.HTTPRule.RuleType == global.HTTPRuleTypeDomain { // 域名接入
 			if serviceItem.HTTPRule.Rule == host {
 				return serviceItem, nil
 			}
 		}
-		if serviceItem.HTTPRule.RuleType == global.HTTPRuleTypePrefixURL {
+		if serviceItem.HTTPRule.RuleType == global.HTTPRuleTypePrefixURL { // url前缀接入
 			if strings.HasPrefix(path, serviceItem.HTTPRule.Rule) {
 				return serviceItem, nil
 			}
