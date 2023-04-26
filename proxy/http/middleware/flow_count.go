@@ -10,7 +10,7 @@ import (
 	"github.com/jiaruling/Gateway/public"
 )
 
-// 流量统计
+// done: 流量统计
 func HTTPFlowCountMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		serverInterface, ok := c.Get("service")

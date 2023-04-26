@@ -23,17 +23,17 @@ func InitRouter(middlewares ...gin.HandlerFunc) *gin.Engine {
 	}
 
 	router.Use(
-		hm.HTTPAccessModeMiddleware(), // 匹配服务
-		hm.HTTPFlowCountMiddleware(),  // 流量统计
-		hm.HTTPFlowLimitMiddleware(),  // 服务限流
-		// hm.HTTPJwtAuthTokenMiddleware(),
-		// hm.HTTPJwtFlowCountMiddleware(),
-		// hm.HTTPJwtFlowLimitMiddleware(),
-		hm.HTTPWhiteListMiddleware(),      // 白名单
-		hm.HTTPBlackListMiddleware(),      // 黑名单
-		hm.HTTPHeaderTransferMiddleware(), // header头设置
-		hm.HTTPStripUriMiddleware(),       // 去除接入前缀
-		hm.HTTPUrlRewriteMiddleware(),     // url重写
+		hm.HTTPAccessModeMiddleware(), // done:匹配服务
+		hm.HTTPFlowCountMiddleware(),  // done:流量统计
+		// hm.HTTPFlowLimitMiddleware(),      // wait for test:服务限流
+		// hm.HTTPJwtAuthTokenMiddleware(),   // wait for test:租户token检验
+		// hm.HTTPJwtFlowCountMiddleware(),   // wait for test:租户流量统计
+		// hm.HTTPJwtFlowLimitMiddleware(),   // wait for test:租户限流
+		hm.HTTPWhiteListMiddleware(),      // done:白名单
+		hm.HTTPBlackListMiddleware(),      // done:黑名单
+		hm.HTTPHeaderTransferMiddleware(), // done:header头设置
+		hm.HTTPStripUriMiddleware(),       // done:去除接入前缀
+		hm.HTTPUrlRewriteMiddleware(),     // done:url重写
 		hm.HTTPReverseProxyMiddleware(),   // tag:【重点】http反向代理
 	)
 	return router

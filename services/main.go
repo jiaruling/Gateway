@@ -14,11 +14,15 @@ import (
 // done: 设置测试服服务器【下游服务器】
 func main() {
 	rs1 := &RealServer{Addr: "127.0.0.1:2001"}
-	rs1.Run()
+	rs1.Run(false)
 	rs2 := &RealServer{Addr: "127.0.0.1:2002"}
-	rs2.Run()
+	rs2.Run(false)
 	rs3 := &RealServer{Addr: "127.0.0.1:2003"}
-	rs3.Run()
+	rs3.Run(false)
+	// rs4 := &RealServer{Addr: "127.0.0.1:3003"}
+	// rs4.Run(true)
+	// rs5 := &RealServer{Addr: "127.0.0.1:3004"}
+	// rs5.Run(true)
 
 	//监听关闭信号
 	quit := make(chan os.Signal)
@@ -30,7 +34,7 @@ type RealServer struct {
 	Addr string
 }
 
-func (r *RealServer) Run() {
+func (r *RealServer) Run(https bool) {
 	log.Println("Starting httpserver at " + r.Addr)
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", r.HelloHandler)
@@ -41,9 +45,15 @@ func (r *RealServer) Run() {
 		WriteTimeout: time.Second * 3,
 		Handler:      mux,
 	}
-	go func() {
-		log.Fatal(server.ListenAndServe())
-	}()
+	if https {
+		go func() {
+			log.Fatal(server.ListenAndServeTLS("../cert_file/server.crt", "../cert_file/server.key"))
+		}()
+	} else {
+		go func() {
+			log.Fatal(server.ListenAndServe())
+		}()
+	}
 }
 
 func (r *RealServer) HelloHandler(w http.ResponseWriter, req *http.Request) {
