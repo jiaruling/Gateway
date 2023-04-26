@@ -10,7 +10,7 @@ import (
 	m "github.com/jiaruling/Gateway/middleware"
 )
 
-// 去除接入前缀 http://127.0.0.1:8080/test_http_string/abbb -> http://127.0.0.1:2004/abbb
+// done: 去除接入前缀 http://127.0.0.1:8080/test_http_string/abbb -> http://127.0.0.1:2004/abbb
 func HTTPStripUriMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		serverInterface, ok := c.Get("service")

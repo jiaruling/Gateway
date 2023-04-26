@@ -9,7 +9,7 @@ import (
 	m "github.com/jiaruling/Gateway/middleware"
 )
 
-// header头设置
+// done: header头设置
 func HTTPHeaderTransferMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		serverInterface, ok := c.Get("service")
@@ -19,14 +19,17 @@ func HTTPHeaderTransferMiddleware() gin.HandlerFunc {
 			return
 		}
 		serviceDetail := serverInterface.(*dao.ServiceDetail)
+
 		for _, item := range strings.Split(serviceDetail.HTTPRule.HeaderTransfor, ",") {
 			items := strings.Split(item, " ")
 			if len(items) != 3 {
 				continue
 			}
+			// 添加和修改请求头
 			if items[0] == "add" || items[0] == "edit" {
 				c.Request.Header.Set(items[1], items[2])
 			}
+			// 删除请求头
 			if items[0] == "del" {
 				c.Request.Header.Del(items[1])
 			}

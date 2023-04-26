@@ -1,5 +1,7 @@
 package global
 
+import "time"
+
 const (
 	MethodPost     = "POST"
 	MethodGet      = "GET"
@@ -36,4 +38,6 @@ const (
 
 	JwtSignKey = "my_sign_key"
 	JwtExpires = 60 * 60
+
+	DataAlive = time.Duration(86400*2) * time.Second
 )

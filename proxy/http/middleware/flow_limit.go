@@ -22,6 +22,7 @@ func HTTPFlowLimitMiddleware() gin.HandlerFunc {
 		}
 		serviceDetail := serverInterface.(*dao.ServiceDetail)
 
+		// 服务端限流
 		if serviceDetail.AccessControl.ServiceFlowLimit != 0 {
 			serviceLimiter, err := public.FlowLimiterHandler.GetLimiter(
 				global.FlowServicePrefix+serviceDetail.Info.ServiceName,
@@ -38,6 +39,7 @@ func HTTPFlowLimitMiddleware() gin.HandlerFunc {
 			}
 		}
 
+		// 客户端限流
 		if serviceDetail.AccessControl.ClientIPFlowLimit > 0 {
 			clientLimiter, err := public.FlowLimiterHandler.GetLimiter(
 				global.FlowServicePrefix+serviceDetail.Info.ServiceName+"_"+c.ClientIP(),

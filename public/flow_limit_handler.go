@@ -1,9 +1,12 @@
 package public
 
 import (
-	"golang.org/x/time/rate"
 	"sync"
+
+	"golang.org/x/time/rate"
 )
+
+// 限流器
 
 var FlowLimiterHandler *FlowLimiter
 
@@ -31,6 +34,7 @@ func init() {
 }
 
 func (counter *FlowLimiter) GetLimiter(serverName string, qps float64) (*rate.Limiter, error) {
+	// 存在限流器直接返回
 	for _, item := range counter.FlowLmiterSlice {
 		if item.ServiceName == serverName {
 			return item.Limter, nil
@@ -42,6 +46,8 @@ func (counter *FlowLimiter) GetLimiter(serverName string, qps float64) (*rate.Li
 		ServiceName: serverName,
 		Limter:      newLimiter,
 	}
+
+	// 加入slice和map
 	counter.FlowLmiterSlice = append(counter.FlowLmiterSlice, item)
 	counter.Locker.Lock()
 	defer counter.Locker.Unlock()

@@ -9,15 +9,8 @@ import (
 	"github.com/jiaruling/Gateway/dto"
 	"github.com/jiaruling/Gateway/global"
 	"github.com/jiaruling/Gateway/middleware"
+	"github.com/jiaruling/Gateway/public"
 	"github.com/jiaruling/golang_utils/lib"
-	// "time"
-	// "github.com/e421083458/go_gateway/public"
-	// "github.com/e421083458/golang_common/lib"
-	// "github.com/gin-gonic/gin"
-	// "github.com/jiaruling/Gateway/dao"
-	// "github.com/jiaruling/Gateway/dto"
-	// "github.com/jiaruling/Gateway/middleware"
-	// "github.com/pkg/errors"
 )
 
 type DashboardController struct{}
@@ -29,7 +22,7 @@ func DashboardRegister(group *gin.RouterGroup) {
 	group.GET("/service_stat", service.ServiceStat)
 }
 
-// todo: 指标统计
+// done: 指标统计
 // PanelGroupData godoc
 // @Summary 指标统计
 // @Description 指标统计
@@ -53,17 +46,16 @@ func (service *DashboardController) PanelGroupData(c *gin.Context) {
 		middleware.ResponseError(c, 2002, err)
 		return
 	}
-	// counter, err := public.FlowCounterHandler.GetCounter(public.FlowTotal)
-	// if err != nil {
-	// 	middleware.ResponseError(c, 2003, err)
-	// 	return
-	// }
-	Qpd, Qps := 0, 0
+	counter, err := public.FlowCounterHandler.GetCounter(global.FlowTotal)
+	if err != nil {
+		middleware.ResponseError(c, 2003, err)
+		return
+	}
 	out := &dto.PanelGroupDataOutput{
 		ServiceNum:      serviceNum,
 		AppNum:          appNum,
-		TodayRequestNum: int64(Qpd),
-		CurrentQPS:      int64(Qps),
+		TodayRequestNum: counter.TotalCount,
+		CurrentQPS:      counter.QPS,
 	}
 	middleware.ResponseSuccess(c, out)
 }
@@ -103,7 +95,7 @@ func (service *DashboardController) ServiceStat(c *gin.Context) {
 	middleware.ResponseSuccess(c, out)
 }
 
-// todo: 流量统计
+// done: 流量统计
 // FlowStat godoc
 // @Summary 服务统计
 // @Description 服务统计
@@ -114,27 +106,25 @@ func (service *DashboardController) ServiceStat(c *gin.Context) {
 // @Success 200 {object} middleware.Response{data=dto.ServiceStatOutput} "success"
 // @Router /dashboard/flow_stat [get]
 func (service *DashboardController) FlowStat(c *gin.Context) {
-	// counter, err := public.FlowCounterHandler.GetCounter(public.FlowTotal)
-	// if err != nil {
-	// 	middleware.ResponseError(c, 2001, err)
-	// 	return
-	// }
+	counter, err := public.FlowCounterHandler.GetCounter(global.FlowTotal)
+	if err != nil {
+		middleware.ResponseError(c, 2001, err)
+		return
+	}
 	todayList := []int64{}
 	currentTime := time.Now()
 	for i := 0; i <= currentTime.Hour(); i++ {
-		// dateTime := time.Date(currentTime.Year(), currentTime.Month(), currentTime.Day(), i, 0, 0, 0, lib.TimeLocation)
-		// hourData, _ := counter.GetHourData(dateTime)
-		// todayList = append(todayList, hourData)
-		todayList = append(todayList, 0)
+		dateTime := time.Date(currentTime.Year(), currentTime.Month(), currentTime.Day(), i, 0, 0, 0, lib.TimeLocation)
+		hourData, _ := counter.GetHourData(dateTime)
+		todayList = append(todayList, hourData)
 	}
 
 	yesterdayList := []int64{}
-	// yesterTime := currentTime.Add(-1 * time.Duration(time.Hour*24))
+	yesterTime := currentTime.Add(-1 * time.Duration(time.Hour*24))
 	for i := 0; i <= 23; i++ {
-		// dateTime := time.Date(yesterTime.Year(), yesterTime.Month(), yesterTime.Day(), i, 0, 0, 0, lib.TimeLocation)
-		// hourData, _ := counter.GetHourData(dateTime)
-		// yesterdayList = append(yesterdayList, hourData)
-		yesterdayList = append(yesterdayList, 0)
+		dateTime := time.Date(yesterTime.Year(), yesterTime.Month(), yesterTime.Day(), i, 0, 0, 0, lib.TimeLocation)
+		hourData, _ := counter.GetHourData(dateTime)
+		yesterdayList = append(yesterdayList, hourData)
 	}
 	middleware.ResponseSuccess(c, &dto.ServiceStatOutput{
 		Today:     todayList,

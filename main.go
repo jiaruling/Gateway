@@ -41,11 +41,11 @@ func main() {
 		// 销毁服务
 		router.HttpServerStop()
 	} else {
-		dao.ServiceManagerHandler.LoadOnce()
-		dao.AppManagerHandler.LoadOnce()
+		dao.ServiceManagerHandler.LoadOnce() // 一次性加载所有服务至内存
+		dao.AppManagerHandler.LoadOnce()     // 一次性加载所有租户至内存
 
-		go hr.HttpServerRun()
-		go hr.HttpsServerRun()
+		go hr.HttpServerRun()  // 启动http反向代理
+		go hr.HttpsServerRun() // 启动https反向代理
 
 		// 优雅退出
 		quit := make(chan os.Signal)

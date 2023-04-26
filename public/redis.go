@@ -18,7 +18,7 @@ func RedisConfPipline(pip ...func(c *redis.Client)) error {
 
 func RedisConfDo(commandName string, args ...interface{}) (int64, error) {
 	rdb := lib.GetRedis()
-	val, err := rdb.Get(context.Background(), "key").Result()
+	val, err := rdb.Get(context.Background(), commandName).Result()
 	if err != nil {
 		return 0, err
 	}

@@ -21,7 +21,7 @@ func HTTPFlowCountMiddleware() gin.HandlerFunc {
 		}
 		serviceDetail := serverInterface.(*dao.ServiceDetail)
 
-		//统计项 1 全站 2 服务 3 租户
+		//统计项 1 全站 2 服务
 		totalCounter, err := public.FlowCounterHandler.GetCounter(global.FlowTotal)
 		if err != nil {
 			middleware.ResponseError(c, 4001, err)
@@ -30,8 +30,6 @@ func HTTPFlowCountMiddleware() gin.HandlerFunc {
 		}
 		totalCounter.Increase()
 
-		//dayCount, _ := totalCounter.GetDayData(time.Now())
-		//fmt.Printf("totalCounter qps:%v,dayCount:%v", totalCounter.QPS, dayCount)
 		serviceCounter, err := public.FlowCounterHandler.GetCounter(global.FlowServicePrefix + serviceDetail.Info.ServiceName)
 		if err != nil {
 			middleware.ResponseError(c, 4001, err)
@@ -40,8 +38,6 @@ func HTTPFlowCountMiddleware() gin.HandlerFunc {
 		}
 		serviceCounter.Increase()
 
-		//dayServiceCount, _ := serviceCounter.GetDayData(time.Now())
-		//fmt.Printf("serviceCounter qps:%v,dayCount:%v", serviceCounter.QPS, dayServiceCount)
 		c.Next()
 	}
 }

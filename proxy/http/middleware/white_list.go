@@ -11,7 +11,7 @@ import (
 	"github.com/jiaruling/Gateway/public"
 )
 
-// 白名单
+// done: 白名单
 func HTTPWhiteListMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		serverInterface, ok := c.Get("service")

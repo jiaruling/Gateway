@@ -5,6 +5,8 @@ import (
 	"time"
 )
 
+// 流量统计
+
 var FlowCounterHandler *FlowCounter
 
 type FlowCounter struct {
@@ -26,6 +28,7 @@ func init() {
 }
 
 func (counter *FlowCounter) GetCounter(serverName string) (*RedisFlowCountService, error) {
+	// 有就直接取
 	for _, item := range counter.RedisFlowCountSlice {
 		if item.AppID == serverName {
 			return item, nil
@@ -33,6 +36,8 @@ func (counter *FlowCounter) GetCounter(serverName string) (*RedisFlowCountServic
 	}
 
 	newCounter := NewRedisFlowCountService(serverName, 1*time.Second)
+
+	// 将新的加入slice和map
 	counter.RedisFlowCountSlice = append(counter.RedisFlowCountSlice, newCounter)
 	counter.Locker.Lock()
 	defer counter.Locker.Unlock()

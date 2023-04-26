@@ -10,7 +10,7 @@ import (
 	m "github.com/jiaruling/Gateway/middleware"
 )
 
-// url重写
+// done: url重写 例如：将/aaa/foo/bar重定向为/bbb/foo/bar，将/aaa/baz重定向为/bbb/baz
 func HTTPUrlRewriteMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		serverInterface, ok := c.Get("service")
@@ -21,20 +21,16 @@ func HTTPUrlRewriteMiddleware() gin.HandlerFunc {
 		}
 		serviceDetail := serverInterface.(*dao.ServiceDetail)
 		for _, item := range strings.Split(serviceDetail.HTTPRule.UrlRewrite, ",") {
-			//fmt.Println("item rewrite",item)
 			items := strings.Split(item, " ")
 			if len(items) != 2 {
 				continue
 			}
 			regexp, err := regexp.Compile(items[0])
 			if err != nil {
-				//fmt.Println("regexp.Compile err",err)
 				continue
 			}
-			//fmt.Println("before rewrite",c.Request.URL.Path)
 			replacePath := regexp.ReplaceAll([]byte(c.Request.URL.Path), []byte(items[1]))
 			c.Request.URL.Path = string(replacePath)
-			//fmt.Println("after rewrite",c.Request.URL.Path)
 		}
 		c.Next()
 	}

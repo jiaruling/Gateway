@@ -11,6 +11,7 @@ import (
 	"time"
 )
 
+// done: 设置测试服服务器【下游服务器】
 func main() {
 	rs1 := &RealServer{Addr: "127.0.0.1:2001"}
 	rs1.Run()
@@ -56,7 +57,6 @@ func (r *RealServer) HelloHandler(w http.ResponseWriter, req *http.Request) {
 	io.WriteString(w, upath)
 	io.WriteString(w, realIP)
 	io.WriteString(w, header)
-
 }
 
 func (r *RealServer) ErrorHandler(w http.ResponseWriter, req *http.Request) {

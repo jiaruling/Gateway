@@ -2,6 +2,8 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/jiaruling/Gateway/controller"
+	m "github.com/jiaruling/Gateway/middleware"
 	hm "github.com/jiaruling/Gateway/proxy/http/middleware"
 )
 
@@ -14,19 +16,25 @@ func InitRouter(middlewares ...gin.HandlerFunc) *gin.Engine {
 		})
 	})
 
+	oauth := router.Group("/oauth")
+	oauth.Use(m.TranslationMiddleware())
+	{
+		controller.OAuthRegister(oauth)
+	}
+
 	router.Use(
-		hm.HTTPAccessModeMiddleware(),
-		// hm.HTTPFlowCountMiddleware(),
-		// hm.HTTPFlowLimitMiddleware(),
+		hm.HTTPAccessModeMiddleware(), // 匹配服务
+		hm.HTTPFlowCountMiddleware(),  // 流量统计
+		hm.HTTPFlowLimitMiddleware(),  // 服务限流
 		// hm.HTTPJwtAuthTokenMiddleware(),
 		// hm.HTTPJwtFlowCountMiddleware(),
 		// hm.HTTPJwtFlowLimitMiddleware(),
-		// hm.HTTPWhiteListMiddleware(),
-		// hm.HTTPBlackListMiddleware(),
-		// hm.HTTPHeaderTransferMiddleware(),
-		// hm.HTTPStripUriMiddleware(),
-		// hm.HTTPUrlRewriteMiddleware(),
-		hm.HTTPReverseProxyMiddleware(),
+		hm.HTTPWhiteListMiddleware(),      // 白名单
+		hm.HTTPBlackListMiddleware(),      // 黑名单
+		hm.HTTPHeaderTransferMiddleware(), // header头设置
+		hm.HTTPStripUriMiddleware(),       // 去除接入前缀
+		hm.HTTPUrlRewriteMiddleware(),     // url重写
+		hm.HTTPReverseProxyMiddleware(),   // tag:【重点】http反向代理
 	)
 	return router
 }

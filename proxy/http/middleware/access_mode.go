@@ -6,7 +6,7 @@ import (
 	m "github.com/jiaruling/Gateway/middleware"
 )
 
-// 匹配接入方式 基于请求信息
+// done: 匹配服务
 func HTTPAccessModeMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		service, err := dao.ServiceManagerHandler.HTTPAccessMode(c)
