@@ -8,7 +8,8 @@ import (
 
 	"github.com/jiaruling/Gateway/dao"
 	_ "github.com/jiaruling/Gateway/initial"
-	hr "github.com/jiaruling/Gateway/proxy/http/router"
+	http_router "github.com/jiaruling/Gateway/proxy/http/router"
+	tcp_router "github.com/jiaruling/Gateway/proxy/tcp/router"
 	"github.com/jiaruling/Gateway/router"
 )
 
@@ -28,13 +29,15 @@ func main() {
 	dao.ServiceManagerHandler.LoadOnce() // 一次性加载所有服务至内存
 	dao.AppManagerHandler.LoadOnce()     // 一次性加载所有租户至内存
 	go router.HttpServerRun()            // 启动管理后台
-	go hr.HttpServerRun()                // 启动http反向代理
-	go hr.HttpsServerRun()               // 启动https反向代理
+	go http_router.HttpServerRun()       // 启动http反向代理
+	go http_router.HttpsServerRun()      // 启动https反向代理
+	go tcp_router.TcpServerRun()         // 启动tcp反向代理
 	// 优雅退出
 	quit := make(chan os.Signal)
 	signal.Notify(quit, syscall.SIGKILL, syscall.SIGQUIT, syscall.SIGINT, syscall.SIGTERM)
 	<-quit
 	router.HttpServerStop()
-	hr.HttpServerStop()
-	hr.HttpsServerStop()
+	http_router.HttpServerStop()
+	http_router.HttpsServerStop()
+	tcp_router.TcpServerStop()
 }
