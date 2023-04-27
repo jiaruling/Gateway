@@ -11,6 +11,7 @@ import (
 	"github.com/jiaruling/Gateway/public"
 )
 
+// done: 租户流量限制
 func HTTPJwtFlowLimitMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		appInterface, ok := c.Get("app")
@@ -19,17 +20,16 @@ func HTTPJwtFlowLimitMiddleware() gin.HandlerFunc {
 			return
 		}
 		appInfo := appInterface.(*dao.App)
+
 		if appInfo.Qps > 0 {
-			clientLimiter, err := public.FlowLimiterHandler.GetLimiter(
-				global.FlowAppPrefix+appInfo.AppID+"_"+c.ClientIP(),
-				float64(appInfo.Qps))
+			clientLimiter, err := public.FlowLimiterHandler.GetLimiter(global.FlowAppPrefix+appInfo.AppID+"_"+c.ClientIP(), float64(appInfo.Qps))
 			if err != nil {
 				middleware.ResponseError(c, 5001, err)
 				c.Abort()
 				return
 			}
 			if !clientLimiter.Allow() {
-				middleware.ResponseError(c, 5002, errors.New(fmt.Sprintf("%v flow limit %v", c.ClientIP(), appInfo.Qps)))
+				middleware.ResponseError(c, 5002, errors.New(fmt.Sprintf("【%v】 flow limit 【%v】", appInfo.AppID, appInfo.Qps)))
 				c.Abort()
 				return
 			}

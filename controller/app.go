@@ -233,6 +233,7 @@ func (admin *APPController) AppUpdate(c *gin.Context) {
 	}
 	// 修改
 	dao.AppManagerHandler.Update(info)
+	public.FlowLimiterHandler.ResetLimiter(global.FlowAppPrefix+info.AppID+"_"+c.ClientIP(), float64(info.Qps))
 	middleware.ResponseSuccess(c, "")
 	return
 }

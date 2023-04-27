@@ -23,12 +23,12 @@ func InitRouter(middlewares ...gin.HandlerFunc) *gin.Engine {
 	}
 
 	router.Use(
-		hm.HTTPAccessModeMiddleware(), // done:匹配服务
-		hm.HTTPFlowCountMiddleware(),  // done:流量统计
-		hm.HTTPFlowLimitMiddleware(),  // done:服务限流
-		// hm.HTTPJwtAuthTokenMiddleware(),   // wait for test:租户token检验
-		// hm.HTTPJwtFlowCountMiddleware(),   // wait for test:租户流量统计
-		// hm.HTTPJwtFlowLimitMiddleware(),   // wait for test:租户限流
+		hm.HTTPAccessModeMiddleware(),     // done:匹配服务
+		hm.HTTPFlowCountMiddleware(),      // done:流量统计
+		hm.HTTPFlowLimitMiddleware(),      // done:服务限流
+		hm.HTTPJwtAuthTokenMiddleware(),   // done:租户token检验
+		hm.HTTPJwtFlowCountMiddleware(),   // done:租户流量统计
+		hm.HTTPJwtFlowLimitMiddleware(),   // done:租户限流
 		hm.HTTPWhiteListMiddleware(),      // done:白名单
 		hm.HTTPBlackListMiddleware(),      // done:黑名单
 		hm.HTTPHeaderTransferMiddleware(), // done:header头设置

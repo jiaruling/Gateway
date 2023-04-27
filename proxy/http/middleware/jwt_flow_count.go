@@ -11,6 +11,7 @@ import (
 	"github.com/jiaruling/Gateway/public"
 )
 
+// 租户流量统计
 func HTTPJwtFlowCountMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		appInterface, ok := c.Get("app")
@@ -19,6 +20,7 @@ func HTTPJwtFlowCountMiddleware() gin.HandlerFunc {
 			return
 		}
 		appInfo := appInterface.(*dao.App)
+
 		appCounter, err := public.FlowCounterHandler.GetCounter(global.FlowAppPrefix + appInfo.AppID)
 		if err != nil {
 			middleware.ResponseError(c, 2002, err)
