@@ -118,3 +118,67 @@ func (s *ServiceManager) LoadOnce() error {
 	})
 	return s.err
 }
+
+func (s *ServiceManager) Add(item *ServiceInfo) {
+	tx := lib.GetMysqlGorm()
+	serviceDetail, err := item.ServiceDetail(tx, item)
+	if err != nil {
+		s.err = err
+		return
+	}
+	s.Locker.Lock()
+	defer s.Locker.Unlock()
+	s.ServiceMap[item.ServiceName] = serviceDetail
+	s.ServiceSlice = append(s.ServiceSlice, serviceDetail)
+	return
+}
+
+func (s *ServiceManager) Update(item *ServiceInfo) {
+	tx := lib.GetMysqlGorm()
+	serviceDetail, err := item.ServiceDetail(tx, item)
+	if err != nil {
+		s.err = err
+		return
+	}
+	s.Locker.Lock()
+	defer s.Locker.Unlock()
+	s.ServiceMap[item.ServiceName] = serviceDetail
+	for i, serviceItem := range s.ServiceSlice {
+		if serviceItem.Info.ServiceName == item.ServiceName {
+			s.ServiceSlice[i] = serviceDetail
+			break
+		}
+	}
+	return
+}
+
+func (s *ServiceManager) Delete(item *ServiceInfo) {
+	s.Locker.Lock()
+	defer s.Locker.Unlock()
+	delete(s.ServiceMap, item.ServiceName)
+	len := len(s.ServiceSlice)
+	for i, serviceItem := range s.ServiceSlice {
+		if serviceItem.Info.ServiceName == item.ServiceName {
+			s.deleteSlice(i, len)
+			break
+		}
+	}
+	return
+}
+
+func (s *ServiceManager) deleteSlice(i, len int) {
+	if len == 1 {
+		s.ServiceSlice = []*ServiceDetail{}
+		return
+	}
+	if i == 0 {
+		s.ServiceSlice = s.ServiceSlice[1:]
+		return
+	}
+	if i == len-1 {
+		s.ServiceSlice = s.ServiceSlice[:len-1]
+		return
+	}
+	s.ServiceSlice = append(s.ServiceSlice[:i], s.ServiceSlice[i+1:]...)
+	return
+}

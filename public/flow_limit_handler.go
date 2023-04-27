@@ -33,6 +33,7 @@ func init() {
 	FlowLimiterHandler = NewFlowLimiter()
 }
 
+// 获取限流器
 func (counter *FlowLimiter) GetLimiter(serverName string, qps float64) (*rate.Limiter, error) {
 	// 存在限流器直接返回
 	for _, item := range counter.FlowLmiterSlice {
@@ -53,4 +54,21 @@ func (counter *FlowLimiter) GetLimiter(serverName string, qps float64) (*rate.Li
 	defer counter.Locker.Unlock()
 	counter.FlowLmiterMap[serverName] = item
 	return newLimiter, nil
+}
+
+// 重置限流器
+func (counter *FlowLimiter) ResetLimiter(serverName string, qps float64) {
+	if _, ok := counter.FlowLmiterMap[serverName]; ok {
+		newLimiter := rate.NewLimiter(rate.Limit(qps), int(qps*3))
+		item := &FlowLimiterItem{
+			ServiceName: serverName,
+			Limter:      newLimiter,
+		}
+		counter.FlowLmiterMap[serverName] = item
+		for i := range counter.FlowLmiterSlice {
+			if counter.FlowLmiterSlice[i].ServiceName == serverName {
+				counter.FlowLmiterSlice[i] = item
+			}
+		}
+	}
 }

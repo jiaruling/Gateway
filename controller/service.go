@@ -153,6 +153,8 @@ func (service *ServiceController) ServiceDelete(c *gin.Context) {
 		middleware.ResponseError(c, 2003, err)
 		return
 	}
+	// 删除ServiceManagerHandler
+	dao.ServiceManagerHandler.Delete(serviceInfo)
 	middleware.ResponseSuccess(c, "")
 }
 
@@ -342,6 +344,8 @@ func (service *ServiceController) ServiceAddHTTP(c *gin.Context) {
 		return
 	}
 	tx.Commit()
+	// 添加到ServiceManagerHandler
+	dao.ServiceManagerHandler.Add(serviceModel)
 	middleware.ResponseSuccess(c, "")
 }
 
@@ -430,6 +434,11 @@ func (service *ServiceController) ServiceUpdateHTTP(c *gin.Context) {
 		return
 	}
 	tx.Commit()
+	// 修改ServiceManagerHandler
+	dao.ServiceManagerHandler.Update(serviceInfo)
+	// 重置限流器
+	public.FlowLimiterHandler.ResetLimiter(global.FlowServicePrefix+info.ServiceName, float64(accessControl.ServiceFlowLimit))
+	public.FlowLimiterHandler.ResetLimiter(global.FlowServicePrefix+info.ServiceName+"_"+c.ClientIP(), float64(accessControl.ClientIPFlowLimit))
 	middleware.ResponseSuccess(c, "")
 }
 
@@ -532,6 +541,11 @@ func (admin *ServiceController) ServiceAddTcp(c *gin.Context) {
 		return
 	}
 	tx.Commit()
+	// 添加ServiceManagerHandler
+	dao.ServiceManagerHandler.Add(info)
+	// 重置限流器
+	public.FlowLimiterHandler.ResetLimiter(global.FlowServicePrefix+info.ServiceName, float64(accessControl.ServiceFlowLimit))
+	public.FlowLimiterHandler.ResetLimiter(global.FlowServicePrefix+info.ServiceName+"_"+c.ClientIP(), float64(accessControl.ClientIPFlowLimit))
 	middleware.ResponseSuccess(c, "")
 	return
 }
@@ -623,6 +637,8 @@ func (admin *ServiceController) ServiceUpdateTcp(c *gin.Context) {
 		return
 	}
 	tx.Commit()
+	// 修改ServiceManagerHandler
+	dao.ServiceManagerHandler.Update(service)
 	middleware.ResponseSuccess(c, "")
 	return
 }
@@ -728,6 +744,8 @@ func (admin *ServiceController) ServiceAddGrpc(c *gin.Context) {
 		return
 	}
 	tx.Commit()
+	// 添加ServiceManagerHandler
+	dao.ServiceManagerHandler.Update(info)
 	middleware.ResponseSuccess(c, "")
 	return
 }
@@ -820,6 +838,11 @@ func (admin *ServiceController) ServiceUpdateGrpc(c *gin.Context) {
 		return
 	}
 	tx.Commit()
+	// 修改ServiceManagerHandler
+	dao.ServiceManagerHandler.Update(service)
+	// 重置限流器
+	public.FlowLimiterHandler.ResetLimiter(global.FlowServicePrefix+info.ServiceName, float64(accessControl.ServiceFlowLimit))
+	public.FlowLimiterHandler.ResetLimiter(global.FlowServicePrefix+info.ServiceName+"_"+c.ClientIP(), float64(accessControl.ClientIPFlowLimit))
 	middleware.ResponseSuccess(c, "")
 	return
 }

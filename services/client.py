@@ -16,11 +16,11 @@ url = (
     # "https://127.0.0.1:4433/test_https_server/bba"
 )
 
-while True:
+for i in range(0, 10):
     response = requests.get(choice(url))
     if response.status_code == 200:
         print('Request succeeded!')
         print(response.text)
     else:
         print('Request failed with status code', response.status_code)
-    sleep(randint(0, 5))
+    # sleep(randint(0, 5))

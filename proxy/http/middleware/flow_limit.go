@@ -11,7 +11,7 @@ import (
 	"github.com/jiaruling/Gateway/public"
 )
 
-// 流量限制
+// done: 流量限制
 func HTTPFlowLimitMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		serverInterface, ok := c.Get("service")

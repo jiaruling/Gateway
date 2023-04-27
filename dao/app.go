@@ -110,3 +110,55 @@ func (s *AppManager) LoadOnce() error {
 	})
 	return s.err
 }
+
+func (s *AppManager) Add(item *App) {
+	s.Locker.Lock()
+	defer s.Locker.Unlock()
+	s.AppMap[item.AppID] = item
+	s.AppSlice = append(s.AppSlice, item)
+	return
+}
+
+func (s *AppManager) Update(item *App) {
+	s.Locker.Lock()
+	defer s.Locker.Unlock()
+	s.AppMap[item.AppID] = item
+	for i, appItem := range s.AppSlice {
+		if appItem.AppID == item.AppID {
+			s.AppSlice[i] = item
+			break
+		}
+	}
+	return
+}
+
+func (s *AppManager) Delete(item *App) {
+	s.Locker.Lock()
+	defer s.Locker.Unlock()
+	delete(s.AppMap, item.AppID)
+	len := len(s.AppSlice)
+	for i, app := range s.AppSlice {
+		if app.AppID == item.AppID {
+			s.deleteSlice(i, len)
+			break
+		}
+	}
+	return
+}
+
+func (s *AppManager) deleteSlice(i, len int) {
+	if len == 1 {
+		s.AppSlice = []*App{}
+		return
+	}
+	if i == 0 {
+		s.AppSlice = s.AppSlice[1:]
+		return
+	}
+	if i == len-1 {
+		s.AppSlice = s.AppSlice[:len-1]
+		return
+	}
+	s.AppSlice = append(s.AppSlice[:i], s.AppSlice[i+1:]...)
+	return
+}
