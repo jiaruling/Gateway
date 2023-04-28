@@ -3,14 +3,15 @@ package tcp_proxy_middleware
 import (
 	"github.com/jiaruling/Gateway/dao"
 	"github.com/jiaruling/Gateway/global"
+	ts "github.com/jiaruling/Gateway/proxy/tcp/server"
 	"github.com/jiaruling/Gateway/public"
 )
 
-func TCPFlowCountMiddleware() func(c *TcpSliceRouterContext) {
-	return func(c *TcpSliceRouterContext) {
+func TCPFlowCountMiddleware() func(c *ts.TcpSliceRouterContext) {
+	return func(c *ts.TcpSliceRouterContext) {
 		serverInterface := c.Get("service")
 		if serverInterface == nil {
-			c.conn.Write([]byte("get service empty"))
+			c.Conn.Write([]byte("get service empty"))
 			c.Abort()
 			return
 		}
@@ -19,7 +20,7 @@ func TCPFlowCountMiddleware() func(c *TcpSliceRouterContext) {
 		//统计项 1 全站 2 服务
 		totalCounter, err := public.FlowCounterHandler.GetCounter(global.FlowTotal)
 		if err != nil {
-			c.conn.Write([]byte(err.Error()))
+			c.Conn.Write([]byte(err.Error()))
 			c.Abort()
 			return
 		}
@@ -27,7 +28,7 @@ func TCPFlowCountMiddleware() func(c *TcpSliceRouterContext) {
 
 		serviceCounter, err := public.FlowCounterHandler.GetCounter(global.FlowServicePrefix + serviceDetail.Info.ServiceName)
 		if err != nil {
-			c.conn.Write([]byte(err.Error()))
+			c.Conn.Write([]byte(err.Error()))
 			c.Abort()
 			return
 		}

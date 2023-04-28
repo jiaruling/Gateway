@@ -29,7 +29,7 @@ func TcpServerRun() {
 			}
 
 			//构建路由及设置中间件
-			router := tm.NewTcpSliceRouter()
+			router := ts.NewTcpSliceRouter()
 			router.Group("/").Use(
 				tm.TCPFlowCountMiddleware(),
 				tm.TCPFlowLimitMiddleware(),
@@ -38,8 +38,8 @@ func TcpServerRun() {
 			)
 
 			//构建回调handler
-			routerHandler := tm.NewTcpSliceRouterHandler(
-				func(c *tm.TcpSliceRouterContext) ts.TCPHandler {
+			routerHandler := ts.NewTcpSliceRouterHandler(
+				func(c *ts.TcpSliceRouterContext) ts.TCPHandler {
 					return reverse_proxy.NewTcpLoadBalanceReverseProxy(c, rb)
 				}, router)
 

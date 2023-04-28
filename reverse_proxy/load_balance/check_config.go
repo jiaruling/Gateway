@@ -45,7 +45,7 @@ func (s *LoadBalanceCheckConf) GetConf() []string {
 	return confList
 }
 
-// 更新配置时，通知监听者也更新
+// 下游服务健康检查
 func (s *LoadBalanceCheckConf) WatchConf() {
 	go func() {
 		confIpErrNum := map[string]int{}

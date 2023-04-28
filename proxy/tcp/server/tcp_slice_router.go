@@ -1,11 +1,9 @@
-package tcp_proxy_middleware
+package tcp_server
 
 import (
 	"context"
 	"math"
 	"net"
-
-	tcp_server "github.com/jiaruling/Gateway/proxy/tcp/server"
 )
 
 const abortIndex int8 = math.MaxInt8 / 2 //最多 63 个中间件
@@ -27,7 +25,7 @@ type TcpSliceGroup struct {
 
 // router上下文
 type TcpSliceRouterContext struct {
-	conn net.Conn
+	Conn net.Conn
 	Ctx  context.Context
 	*TcpSliceGroup
 	index int8
@@ -36,7 +34,7 @@ type TcpSliceRouterContext struct {
 func newTcpSliceRouterContext(conn net.Conn, r *TcpSliceRouter, ctx context.Context) *TcpSliceRouterContext {
 	newTcpSliceGroup := &TcpSliceGroup{}
 	*newTcpSliceGroup = *r.groups[0] //浅拷贝数组指针,只会使用第一个分组
-	c := &TcpSliceRouterContext{conn: conn, TcpSliceGroup: newTcpSliceGroup, Ctx: ctx}
+	c := &TcpSliceRouterContext{Conn: conn, TcpSliceGroup: newTcpSliceGroup, Ctx: ctx}
 	c.Reset()
 	return c
 }
@@ -50,7 +48,7 @@ func (c *TcpSliceRouterContext) Set(key, val interface{}) {
 }
 
 type TcpSliceRouterHandler struct {
-	coreFunc func(*TcpSliceRouterContext) tcp_server.TCPHandler
+	coreFunc func(*TcpSliceRouterContext) TCPHandler
 	router   *TcpSliceRouter
 }
 
@@ -63,7 +61,7 @@ func (w *TcpSliceRouterHandler) ServeTCP(ctx context.Context, conn net.Conn) {
 	c.Next()
 }
 
-func NewTcpSliceRouterHandler(coreFunc func(*TcpSliceRouterContext) tcp_server.TCPHandler, router *TcpSliceRouter) *TcpSliceRouterHandler {
+func NewTcpSliceRouterHandler(coreFunc func(*TcpSliceRouterContext) TCPHandler, router *TcpSliceRouter) *TcpSliceRouterHandler {
 	return &TcpSliceRouterHandler{
 		coreFunc: coreFunc,
 		router:   router,

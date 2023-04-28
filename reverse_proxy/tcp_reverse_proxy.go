@@ -7,11 +7,11 @@ import (
 	"net"
 	"time"
 
-	tcp_proxy_middleware "github.com/jiaruling/Gateway/proxy/tcp/middleware"
+	ts "github.com/jiaruling/Gateway/proxy/tcp/server"
 	"github.com/jiaruling/Gateway/reverse_proxy/load_balance"
 )
 
-func NewTcpLoadBalanceReverseProxy(c *tcp_proxy_middleware.TcpSliceRouterContext, lb load_balance.LoadBalance) *TcpReverseProxy {
+func NewTcpLoadBalanceReverseProxy(c *ts.TcpSliceRouterContext, lb load_balance.LoadBalance) *TcpReverseProxy {
 	return func() *TcpReverseProxy {
 		nextAddr, err := lb.Get("")
 		if err != nil {

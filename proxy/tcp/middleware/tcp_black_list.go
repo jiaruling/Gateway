@@ -5,15 +5,16 @@ import (
 	"strings"
 
 	"github.com/jiaruling/Gateway/dao"
+	ts "github.com/jiaruling/Gateway/proxy/tcp/server"
 	"github.com/jiaruling/Gateway/public"
 )
 
 // 匹配接入方式 基于请求信息
-func TCPBlackListMiddleware() func(c *TcpSliceRouterContext) {
-	return func(c *TcpSliceRouterContext) {
+func TCPBlackListMiddleware() func(c *ts.TcpSliceRouterContext) {
+	return func(c *ts.TcpSliceRouterContext) {
 		serverInterface := c.Get("service")
 		if serverInterface == nil {
-			c.conn.Write([]byte("get service empty"))
+			c.Conn.Write([]byte("get service empty"))
 			c.Abort()
 			return
 		}
@@ -29,14 +30,14 @@ func TCPBlackListMiddleware() func(c *TcpSliceRouterContext) {
 			blackIpList = strings.Split(serviceDetail.AccessControl.BlackList, ",")
 		}
 
-		splits := strings.Split(c.conn.RemoteAddr().String(), ":")
+		splits := strings.Split(c.Conn.RemoteAddr().String(), ":")
 		clientIP := ""
 		if len(splits) == 2 {
 			clientIP = splits[0]
 		}
 		if serviceDetail.AccessControl.OpenAuth == 1 && len(whileIpList) == 0 && len(blackIpList) > 0 {
 			if public.InStringSlice(blackIpList, clientIP) {
-				c.conn.Write([]byte(fmt.Sprintf("%s in black ip list", clientIP)))
+				c.Conn.Write([]byte(fmt.Sprintf("%s in black ip list", clientIP)))
 				c.Abort()
 				return
 			}
