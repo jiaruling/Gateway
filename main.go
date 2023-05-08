@@ -8,6 +8,7 @@ import (
 
 	"github.com/jiaruling/Gateway/dao"
 	_ "github.com/jiaruling/Gateway/initial"
+	grpc_router "github.com/jiaruling/Gateway/proxy/grpc/router"
 	http_router "github.com/jiaruling/Gateway/proxy/http/router"
 	tcp_router "github.com/jiaruling/Gateway/proxy/tcp/router"
 	"github.com/jiaruling/Gateway/router"
@@ -32,6 +33,7 @@ func main() {
 	go http_router.HttpServerRun()       // 启动http反向代理
 	go http_router.HttpsServerRun()      // 启动https反向代理
 	go tcp_router.TcpServerRun()         // 启动tcp反向代理
+	go grpc_router.GrpcServerRun()       // 启动grpc反向代理
 	// 优雅退出
 	quit := make(chan os.Signal)
 	signal.Notify(quit, syscall.SIGKILL, syscall.SIGQUIT, syscall.SIGINT, syscall.SIGTERM)
@@ -40,4 +42,6 @@ func main() {
 	http_router.HttpServerStop()
 	http_router.HttpsServerStop()
 	tcp_router.TcpServerStop()
+	grpc_router.GrpcServerStop()
+
 }
